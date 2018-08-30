@@ -23,18 +23,18 @@ func newRoom() *room {
 }
 
 func (r *room) run() {
-  log.Println("root: running")
+  log.Println("room: running")
   for {
     select {
     case client := <-r.join:
-      log.Println("root: join")
+      log.Println("room: join")
       r.clients[client] = true
     case client := <-r.leave:
-      log.Println("root: leave")
+      log.Println("room: leave")
       delete(r.clients, client)
       close(client.send)
     case msg := <-r.forward:
-      log.Println("root: forward")
+      log.Println("room: forward")
       for client := range r.clients {
         select {
         case client.send <- msg:
